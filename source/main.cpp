@@ -23,12 +23,12 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     float vertices[] = {
-        0.0f, 0.5f,
-        -0.5f, -0.5f,
-        0.5f, -0.5f
+        0.0f, 0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f
     };
 
-    GLFWwindow* window = glfwCreateWindow(800, 450, "RIM", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(600, 600, "RIM", NULL, NULL);
 
     if (!window) {
         glfwTerminate();
