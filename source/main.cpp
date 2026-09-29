@@ -1,7 +1,10 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 #include "shader.h"
+#include "texture.h"
 
 int main() {
     if (!glfwInit()) return -1;
@@ -11,10 +14,10 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     float vertices[] = {
-        0.5f, 0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f
     };
 
     unsigned int indices[] = {
@@ -36,7 +39,8 @@ int main() {
         return -1;
     }
 
-    Shader shader("resources/shaders/basic.vsh", "resources/shaders/basic.fsh");
+    Shader shader("resources/shaders/texture.vsh", "resources/shaders/texture.fsh");
+    Texture texture("resources/textures/image.jpg");
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
@@ -46,8 +50,12 @@ int main() {
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     unsigned int IBO;
     glGenBuffers(1, &IBO);
@@ -62,8 +70,10 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.Bind();
+        texture.Bind(0);
+        shader.SetInt("u_Texture", 0);
+
         glBindVertexArray(VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
@@ -72,6 +82,7 @@ int main() {
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &IBO);
 
     glfwTerminate();
 

@@ -45,20 +45,22 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    Bind();
 }
 
 Shader::~Shader() {
     glDeleteProgram(m_ID);
 }
 
-void Shader::Bind() {
+void Shader::Bind() const {
     if (m_BoundID != m_ID) {
         glUseProgram(m_ID);
         m_BoundID = m_ID;
     }
 }
 
-void Shader::Unbind() {
+void Shader::Unbind() const {
     glUseProgram(0);
     m_BoundID = 0;
 }
