@@ -65,14 +65,6 @@ void Shader::Unbind() const {
     m_BoundID = 0;
 }
 
-void Shader::SetBool(const std::string &name, bool value) const {
-    glUniform1i(glGetUniformLocation(m_ID, name.c_str()), (int)value);
-}
-
-void Shader::SetInt(const std::string &name, int value) const {
-    glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
-}
-
-void Shader::SetFloat(const std::string &name, float value) const {
-    glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
+unsigned int Shader::GetUniformLocation(const std::string &name) {
+    return glGetUniformLocation(m_ID, name.c_str());
 }
